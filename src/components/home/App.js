@@ -1,15 +1,30 @@
-import React from "react";
-import action from "../redux/actions/action";
+import React, { PureComponent } from "react";
+import Counter from '../counter/counter'
 import "./App.module.css";
 
-const App = () => {
-  return (
-    <div>
-      <h1 data-js="counter">0</h1>
-      <button data-js="decrement">-</button>
-      <button data-js="increment">+</button>
-    </div>
-  );
-};
+class CounterContainer extends PureComponent {
+  constructor() {
+    super()
+    this.state = {
+      counter: 0
+    }
 
-export default App;
+    this.increment = () => {
+      this.setState({ counter: this.state.counter + 1 })
+    }
+
+    this.decrement = () => {
+      this.setState({ counter: this.state.counter - 1 })
+    }
+   }
+
+   render() {
+     const { counter } = this.state
+     return (
+       <Counter counter={counter} increment={this.increment} decrement={this.decrement}/>
+     )
+   }
+}
+
+
+export default CounterContainer;
