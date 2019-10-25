@@ -1,29 +1,24 @@
-import React, { PureComponent } from "react";
-import Counter from '../counter/counter'
-import "./App.module.css";
+ 
+'use strict'
+import React from 'react';
+import CounterContainer from '../counterCounteiner/CounterContainer'
+import { Provider } from 'react-redux'
+import { createStore } from "redux";
 
-class CounterContainer extends PureComponent {
-  constructor() {
-    super()
-
-    this.increment = () => {
-      this.props.store.dispatch({ type: 'INCREMENT' })
-    }
-
-    this.decrement = () => {
-      this.props.store.dispatch({ type: 'DECREMENT' })
-    }
-   }
-
-   componentDidMount() {
-     this.props.store.subscribe(() => this.forceUpdate())
-   }
-
-   render() {
-     return (
-       <Counter counter={this.props.store.getState()} increment={this.increment} decrement={this.decrement}/>
-     )
-   }
+const counter = (state = 0, action) => {
+       switch (action.type) {
+              case 'INCREMENT': return state + 1
+              case 'DECREMENT': return state - 1
+       }
+       return state
 }
 
-export default CounterContainer;
+const store = createStore(counter)
+
+const App = () => (
+       <Provider store={store}>
+         <CounterContainer/>
+       </Provider>
+)
+
+export default App
