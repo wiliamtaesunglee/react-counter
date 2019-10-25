@@ -1,30 +1,42 @@
 import React, { PureComponent } from "react";
 import Counter from '../counter/counter'
+import { createStore } from 'redux'
 import "./App.module.css";
+
+const counter = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT': return state + 1
+    case 'DECREMENT': return state - 1
+    default: return state
+  }
+}
+
+const store = createStore(counter)
+
+store.dispatch({ type: 'INCREMENT' })
 
 class CounterContainer extends PureComponent {
   constructor() {
     super()
-    this.state = {
-      counter: 0
-    }
 
     this.increment = () => {
-      this.setState({ counter: this.state.counter + 1 })
+      store.dispatch({ type: 'INCREMENT' })
     }
 
     this.decrement = () => {
-      this.setState({ counter: this.state.counter - 1 })
+      store.dispatch({ type: 'DECREMENT' })
     }
    }
 
+   componentDidMount() {
+     store.subscribe(() => this.forceUpdate())
+   }
+
    render() {
-     const { counter } = this.state
      return (
-       <Counter counter={counter} increment={this.increment} decrement={this.decrement}/>
+       <Counter counter={store.getState()} increment={this.increment} decrement={this.decrement}/>
      )
    }
 }
-
 
 export default CounterContainer;
